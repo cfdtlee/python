@@ -1,22 +1,27 @@
 #!/usr/bin/env python
 # coding=utf-8
 from xml.dom.minidom import Document
+import sys
+reload(sys)
+sys.setdefaultencoding( "utf-8" )
 
 def generate_xml(items, tel, features, dishes):
-    count = len(items)
     doc = Document()  #创建DOM文档对象
     InfoList = doc.createElement('InfoList') #创建根元素
+    doc.appendChild(InfoList)
 
     Title = doc.createElement('Title')
     Title_text = doc.createTextNode('OptimalList') #元素内容写入
     Title.appendChild(Title_text)
     InfoList.appendChild(Title)
 
+    items = (items,items)###################
+    count = len(items)
     Count = doc.createElement('Count')
     Count_text = doc.createTextNode(str(count))
     Count.appendChild(Count_text)
     InfoList.appendChild(Count)
-    items = (items,items)###################
+    
     for it in items:
         Item = doc.createElement('Item')
         InfoList.appendChild(Item)
@@ -77,23 +82,26 @@ def generate_xml(items, tel, features, dishes):
         Item.appendChild(ItemClass)
         
         Tel = doc.createElement('Tel')
-        Tel_text = doc.createTextNode(str(tel))
+        Tel_text = doc.createTextNode(tel[1])
         Tel.appendChild(Tel_text)
         Item.appendChild(Tel)
 
         features = features+['none','none','none']
         for i in range(0,3):
             Feature = doc.createElement('Feature')
-            Feature_text = doc.createTextNode(str(features[i]))
+            Feature_text = doc.createTextNode(features[i][1])
             Feature.appendChild(Feature_text)
             Item.appendChild(Feature)
 
         dishes = dishes+['none','none']
         for i in range(0,2):
             Dish = doc.createElement('Dish')
-            Dish_text = doc.createTextNode(str(dishes[i]))
+            Dish_text = doc.createTextNode(dishes[i][1])
             Dish.appendChild(Dish_text)
             Item.appendChild(Dish)
-    return doc
+    f = open('fooooood.xml','w')
+    f.write(doc.toprettyxml())
+    f.close()
+    return doc.toprettyxml()
 
 
