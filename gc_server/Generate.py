@@ -91,7 +91,7 @@ def generate_xml(items, tel, features, dishes):
 
         features = features+['none']
         for feature in features:
-            if feature == 'none'
+            if feature == 'none':
                 break
             Feature = doc.createElement('Feature')
             Feature_text = doc.createTextNode(feature[1])
@@ -100,7 +100,7 @@ def generate_xml(items, tel, features, dishes):
 
         dishes = dishes+['none']
         for dish in dishes:
-            if dish == 'none'
+            if dish == 'none':
                 break
             Dish = doc.createElement('Dish')
             Dish_text = doc.createTextNode(dish[1])
