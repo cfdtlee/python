@@ -15,7 +15,7 @@ def generate_xml(items, tel, features, dishes):
     Title.appendChild(Title_text)
     InfoList.appendChild(Title)
 
-    items = (items,items)###################
+    items = (items,"none") ###################
     count = len(items)
     Count = doc.createElement('Count')
     Count_text = doc.createTextNode(str(count))
@@ -23,6 +23,9 @@ def generate_xml(items, tel, features, dishes):
     InfoList.appendChild(Count)
     
     for it in items:
+        if it == "none":
+            break
+
         Item = doc.createElement('Item')
         InfoList.appendChild(Item)
 
@@ -86,22 +89,23 @@ def generate_xml(items, tel, features, dishes):
         Tel.appendChild(Tel_text)
         Item.appendChild(Tel)
 
-        features = features+['none','none','none']
-        for i in range(0,3):
+        features = features+['none']
+        for feature in features:
+            if feature == 'none'
+                break
             Feature = doc.createElement('Feature')
-            Feature_text = doc.createTextNode(features[i][1])
+            Feature_text = doc.createTextNode(feature[1])
             Feature.appendChild(Feature_text)
             Item.appendChild(Feature)
 
-        dishes = dishes+['none','none']
-        for i in range(0,2):
+        dishes = dishes+['none']
+        for dish in dishes:
+            if dish == 'none'
+                break
             Dish = doc.createElement('Dish')
-            Dish_text = doc.createTextNode(dishes[i][1])
+            Dish_text = doc.createTextNode(dish[1])
             Dish.appendChild(Dish_text)
             Item.appendChild(Dish)
-    f = open('fooooood.xml','w')
-    f.write(doc.toprettyxml())
-    f.close()
     return doc.toprettyxml()
 
 
