@@ -54,6 +54,15 @@ def find_the_nearest(lat0, lng0):
             min_dis = dis
     return min_item
 
+def get_the_nearest_3(lat, lng):
+    cx = sqlite3.connect("gc_data.db")
+    cu = cx.cursor()
+    cu.execute("select * from shop")
+    items = cu.fetchall()
+    sort()  ######
+    return items[0:3]
+
+
 def get_feature(url):
     cx = sqlite3.connect("gc_data.db")
     cu = cx.cursor()
@@ -76,10 +85,13 @@ def get_tel(url):
     return tel
 
 
-@app.route('/user/<username>')
-def show_user_profile(username):
-    # show the user profile for that user
-    return 'User %s' % username
+@app.route('/sort/',methods=['GET'])
+def get_sorted():
+    lat = request.args.get('lat')
+    lng = request.args.get('lng')
+    lat = float(lat)
+    lng = float(lng)
+    items = get_the_nearest_3(lat, lng)
  
 @app.route('/loc/',methods=['GET'])
 def data_get():
