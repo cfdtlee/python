@@ -91,7 +91,7 @@ def get_sorted():
     lng = request.args.get('lng')
     lat = float(lat)
     lng = float(lng)
-    items = get_the_nearest_3(lat, lng)
+    items = get_the_nearest_3(lat, lng) ##
  
 @app.route('/loc/',methods=['GET'])
 def data_get():
