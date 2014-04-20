@@ -59,8 +59,8 @@ def get_the_nearest_3(lat, lng):
     cu = cx.cursor()
     cu.execute("select * from shop")
     items = cu.fetchall()
-    sort()  ######
-    return items[0:3]
+    sorted_items = sorted(items, cmp=lambda x,y:cmp(getdistance(lat, lng, x[12], x[13]), getdistance(lat, lng, y[12], y[13])))  ######sorted(L, cmp=lambda x,y:cmp(x[1],y[1]))
+    return sorted_items[0:3]
 
 
 def get_feature(url):
@@ -92,6 +92,7 @@ def get_sorted():
     lat = float(lat)
     lng = float(lng)
     items = get_the_nearest_3(lat, lng) ##
+    return str(items)
  
 @app.route('/loc/',methods=['GET'])
 def data_get():
