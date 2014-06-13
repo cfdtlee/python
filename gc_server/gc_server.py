@@ -36,7 +36,8 @@ def getdistance(lat1, lng1, lat2, lng2):
     s = s * EARTH_RADIUS
     return s
 
-def getoptscore():
+def getoptscore(): #按照方差公式排序
+    
     return score
 
 def find_the_nearest(lat0, lng0):
@@ -44,12 +45,12 @@ def find_the_nearest(lat0, lng0):
     cu = cx.cursor()
     cu.execute("select * from shop")
     item = cu.fetchone() # lat = item[12], lng = item[13]
-    min_dis = getdistance(lat0, lng0, item[12], item[13])
+    min_dis = getdistance(lat0, lng0, item[17], item[18])
     min_item = item
     items = cu.fetchall()
     for it in items:
-        lat = it[12]
-        lng = it[13]
+        lat = it[17]
+        lng = it[18]
         dis = getdistance(lat0, lng0, lat, lng)
         if dis < min_dis:
             min_item = it
