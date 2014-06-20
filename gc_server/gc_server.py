@@ -10,6 +10,8 @@ import math
 from xml.dom.minidom import Document
 from Generate import generate_xml
 import sys
+import time
+import datetime
 reload(sys)
 sys.setdefaultencoding( "utf-8" )
 
@@ -42,14 +44,17 @@ def getoptscore(lat, lng, consume, sweet, sour, spicy, salty, order, time, x): #
     	time = 8
     if time >=22:
     	time = 22
-    istime = (float)(open_time[time-8])
+    istime = float(open_time[time-8])
     distance = getdistance(lat, lng, x[16], x[17])
-    dconsume = float(consume) - float(x[4])
-    dsweet = float(sweet) - float(x[13])
-    dsour = float(sour) - float(x[12])
-    dspicy = float(spicy) - float(x[15])
-    dsalty = float(salty) - float(x[14])
-    score = istime*(distance*distance + dconsume*dconsume + dsweet*dsweet + dsour*dsour + dspicy*dspicy +dsalty*dsalty)
+    dconsume = (float(consume) - float(x[4]))
+    dsweet = (float(sweet) - float(x[13]))
+    dsour = (float(sour) - float(x[12]))
+    dspicy = (float(spicy) - float(x[15]))
+    dsalty = (float(salty) - float(x[14]))
+    if istime == 1:
+        score = distance*distance*10 + dconsume*dconsume + dsweet*dsweet + dsour*dsour + dspicy*dspicy +dsalty*dsalty
+    else:
+    	score = 99999999
     return score
 
 def find_the_nearest(lat0, lng0):
@@ -67,14 +72,35 @@ def find_the_nearest(lat0, lng0):
         if dis < min_dis:
             min_item = it
             min_dis = dis
-    return min_item
+    return min_
+
+def find_the_farest(lat0, lng0):
+    cx = sqlite3.connect("gc_data.db")
+    cu = cx.cursor()
+    cu.execute("select * from shop")
+    item = cu.fetchone() # lat = item[12], lng = item[13]
+    max_dis = getdistance(lat0, lng0, item[16], item[17])
+    max_item = item
+    items = cu.fetchall()
+    for it in items:
+        lat = it[16]
+        lng = it[17]
+        dis = getdistance(lat0, lng0, lat, lng)
+        if dis > max_dis:
+            max_item = it
+            max_dis = dis
+    return max_item
 
 def get_the_nearest(lat, lng, order):
     cx = sqlite3.connect("gc_data.db")
     cu = cx.cursor()
+    t1 = time.time()
     cu.execute("select * from shop")
     items = cu.fetchall()
-    sorted_items = sorted(items, cmp=lambda x,y:cmp(getdistance(lat, lng, x[12], x[13]), getdistance(lat, lng, y[12], y[13])))  ######sorted(L, cmp=lambda x,y:cmp(x[1],y[1]))
+    t2 = time.time()
+    sorted_items = sorted(items, cmp=lambda x,y:cmp(getdistance(lat, lng, x[16], x[17]), getdistance(lat, lng, y[16], y[17])))  ######sorted(L, cmp=lambda x,y:cmp(x[1],y[1]))
+    t3 = time.time()
+    print '数据库查询3205条数据花费：' + str((t2-t1)*1000) + '微秒，排序3205条数据花费：' + str((t3-t2)*1000) + '微秒'
     return sorted_items[0+int(order)*10:10+int(order)*10]
 
 def get_the_optimal(lat, lng, consume, sweet, sour, spicy, salty, order, time):
