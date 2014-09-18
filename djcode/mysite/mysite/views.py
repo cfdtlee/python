@@ -21,3 +21,9 @@ def hours_ahead(request, offset):
 	return render_to_response('hours_ahead.html', locals())
     #html = "<html><body>In %s hour(s), it will be %s.</body></html>" % (offset, dt)
 	#return HttpResponse(html)
+
+
+def display_meta(request):
+    values = request.META.items()
+    values.sort()
+    return render_to_response('meta.html', locals())
