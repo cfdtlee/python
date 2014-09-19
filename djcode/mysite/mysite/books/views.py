@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
-
+from django.template import RequestContext
 from mysite.books.models import Book
 # Create your views here.
 
@@ -41,7 +41,7 @@ def contact(request):
 				['siteowner@example.com'],
 			)
 			return HttpResponseRedirect('contact/thanks')
-	return render_to_response('contact_form.html', {'errors':errors},  context_instance=RequestContext(request))
+	return render_to_response('contact_form.html', {'errors':errors, 'subject': request.POST.get('subject', ''), 'message': request.POST.get('message', ''), 'e-mail': request.POST.get('e-mail', ''),},  context_instance=RequestContext(request))
 
 
 
