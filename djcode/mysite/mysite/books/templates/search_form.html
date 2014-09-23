@@ -1,0 +1,16 @@
+<html>
+<head>
+	<title>Search</title>
+</head>
+<body>
+	{% for error in errors %}
+		<ul>
+			<li>{{ error }}</li>
+		</ul>
+	{% endfor %}
+	<form action='' method='get'>
+		<input type="text" name="q">
+		<input type="submit" value="Search">
+	</form>
+</body>
+</html>
