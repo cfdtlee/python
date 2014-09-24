@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.template import RequestContext
 from mysite.books.models import Book
+
 # Create your views here.
 
 #def search_form(request):
@@ -24,24 +25,24 @@ def search(request):
 		#message = 'You submitted an empty form.'
 		#return HttpResponse(message)
 
+
+from django.core.mail import send_mail
+from forms import CotactForm
 def contact(request):
-	errors = []
 	if request.method == 'POST':
-		if not request.POST.get('subject', ''):
-			errors.append('Enter a subject.')
-		if not request.POST.get('message', ''):
-			errors.append('Enter a message')
-		if request.POST.get('e-mail') and '@' not in request.POST['e-mail']:
-			errors.append('Enter a valid e-mail address.')
-		if not errors:
+		form = ContactForm(request.POST)
+		if form.is_valid():
+			cd = form.cleaned_data
 			send_mail(
-				request.POST['subject'],
-				request.POST['message'],
-				request.POST.get('e-mail', 'noreply@example.com'),
-				['siteowner@example.com'],
+				cd['subject'],
+				cd['message'],
+				cd.get('e-mail', '120084324@qq.com'),
+				['120084324@qq.com'],
 			)
-			return HttpResponseRedirect('contact/thanks')
-	return render_to_response('contact_form.html', {'errors':errors, 'subject': request.POST.get('subject', ''), 'message': request.POST.get('message', ''), 'e-mail': request.POST.get('e-mail', ''),},  context_instance=RequestContext(request))
+			return HttpResponseRedirect('/contact/thanks/')
+	else:
+		form = ContactForm({'subject':'hhh', 'e-mail':'saasf@gasg.com','message':'nicd'})
+	return render_to_response('contact_form.html', {'form': form}, context_instance=RequestContext(request))
 
 
 
