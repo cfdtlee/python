@@ -27,7 +27,30 @@ def search(request):
 
 
 from django.core.mail import send_mail
-from forms import CotactForm
+from django.http import HttpResponseRedirect
+from forms import ContactForm
+
+'''def contact(request):
+	errors = []
+	if request.method == 'POST':
+		if not request.POST.get('subject', ''):
+			errors.append('Enter a subject')
+		if not request.POST.get('message', ''):
+			errors.append('Enter a message')
+		if request.POST.get('e-mail') and '@' not in request.POST['e-mail']:
+			errors.append('Enter a valid e-mail address.')
+		if not errors:
+			send_mail(
+				request.POST['subject'],
+				request.POST['message'],
+				request.POST.get('e-mail', '120084324@qq.com'),
+				['120084324@qq.com'],
+			)
+			return HttpResponseRedirect('/contact/thanks/')
+	return render_to_response('contact_form.html', {'errors':errors}, context_instance=RequestContext(request))
+
+
+'''
 def contact(request):
 	if request.method == 'POST':
 		form = ContactForm(request.POST)
@@ -44,6 +67,18 @@ def contact(request):
 		form = ContactForm({'subject':'hhh', 'e-mail':'saasf@gasg.com','message':'nicd'})
 	return render_to_response('contact_form.html', {'form': form}, context_instance=RequestContext(request))
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+
+def register(request):
+	if request.method == 'POST':
+		form = UserCreationForm(request.POST)
+		if form.is_valid():
+			new_user = form.save()
+			return HttpResponseRedirect("/books/")
+	else:
+		form = UserCreationForm()
+	return render_to_response("registration/register.html", {'form':form,}, context_instance=RequestContext(request))
 
 
 
